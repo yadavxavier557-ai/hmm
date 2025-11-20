@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NeoShop — Modern E‑Commerce Experience</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            neo: {
+              orange: '#FF6A3D',
+              pink: '#FF2D92',
+              yellow: '#FFCF53',
+              dark: '#020617',
+            },
+          },
+          boxShadow: {
+            'glow': '0 0 40px rgba(249,115,22,0.35)',
+          },
+          backgroundImage: {
+            'mesh':
+              'radial-gradient(circle at 0% 0%, rgba(248,113,113,0.20), transparent 55%), radial-gradient(circle at 100% 0%, rgba(56,189,248,0.16), transparent 55%), radial-gradient(circle at 0% 100%, rgba(251,191,36,0.16), transparent 55%)',
+          },
+          animation: {
+            'float-slow': 'float 18s ease-in-out infinite',
+            'pulse-soft': 'pulse-soft 3.4s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translate3d(0,0,0) rotate(0deg)' },
+              '50%': { transform: 'translate3d(0,-12px,0) rotate(1deg)' },
+            },
+            'pulse-soft': {
+              '0%,100%': { opacity: 0.6 },
+              '50%': { opacity: 1 },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15,23,42,0.9);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148,163,184,0.6);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148,163,184,0.9);
+    }
+    .glass {
+      background: rgba(15,23,42,0.8);
+      backdrop-filter: blur(18px);
+    }
+    .glass-soft {
+      background: rgba(15,23,42,0.65);
+      backdrop-filter: blur(18px);
+    }
+    .btn-neo {
+      background-image: linear-gradient(135deg, #ff6a3d, #ff2d92);
+      box-shadow: 0 14px 30px rgba(248,113,113,0.4);
+    }
+    .btn-neo:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(248,113,113,0.55);
+    }
+    .chip-active {
+      background-image: linear-gradient(135deg, rgba(248,113,113,0.15), rgba(56,189,248,0.15));
+      border-color: rgba(248,113,113,0.65);
+      color: #f97316;
+    }
+    .gradient-ring {
+      position: relative;
+    }
+    .gradient-ring::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: conic-gradient(from 130deg, rgba(248,113,113,0.5), rgba(59,130,246,0.5), rgba(52,211,153,0.5), rgba(248,113,113,0.5));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+    .shadow-soft {
+      box-shadow: 0 22px 80px rgba(15,23,42,0.85);
+    }
+    .product-card:hover .product-media {
+      transform: translateY(-4px) scale(1.02);
+    }
+    .product-card:hover .product-media img {
+      transform: scale(1.02);
+    }
+    .product-card:hover .product-meta {
+      transform: translateY(-2px);
+    }
+    .badge-pulse {
+      animation: pulse-soft 3.4s ease-in-out infinite;
+    }
+    @media (max-width: 640px) {
+      .hide-scrollbar-mobile::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar-mobile {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-50 antialiased">
+  <div class="min-h-screen bg-mesh bg-fixed">
+    <!-- Global background orbs -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden opacity-60 mix-blend-screen">
+      <div class="absolute -top-40 -left-32 h-80 w-80 rounded-full bg-orange-500/25 blur-3xl animate-float-slow"></div>
+      <div class="absolute top-1/3 -right-32 h-72 w-72 rounded-full bg-pink-500/25 blur-3xl animate-float-slow"></div>
+      <div class="absolute bottom-0 left-10 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl animate-float-slow"></div>
+    </div>
+
+    <div class="relative flex min-h-screen flex-col">
+      <!-- Top ribbon -->
+      <div class="hidden border-b border-white/5 bg-black/40 px-4 py-2 text-xs text-slate-200 md:block backdrop-blur">
+        <div class="mx-auto flex max-w-6xl items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-emerald-300">
+              Free shipping from $49
+            </span>
+            <span class="text-slate-400">
+              11.11 Hyper Sale · Up to
+              <span class="font-semibold text-orange-400">90% OFF</span>
+            </span>
+          </div>
+          <div class="flex gap-4 text-slate-400">
+            <button class="hover:text-slate-100">Become a Seller</button>
+            <button class="hover:text-slate-100">Help Center</button>
+            <button class="hover:text-slate-100">EN / USD</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <header class="sticky top-0 z-40 border-b border-white/5 bg-slate-950/85 backdrop-blur-xl">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:py-4">
+          <!-- Left: Logo & mobile menu -->
+          <div class="flex items-center gap-3 md:gap-5">
+            <button class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-slate-900/80 text-slate-200 shadow-sm hover:bg-slate-800 md:hidden" id="mobileMenuToggle" aria-label="Open categories">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 6h16M4 12h10M4 18h16" />
+              </svg>
+            </button>
+            <a href="#" class="flex items-center gap-2">
+              <div class="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-tr from-neo-orange via-neo-pink to-neo-yellow shadow-glow">
+                <span class="text-lg font-extrabold leading-none text-white">N</span>
+                <span class="absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent opacity-80 mix-blend-overlay"></span>
+              </div>
+              <div class="hidden flex-col leading-tight md:flex">
+                <span class="bg-gradient-to-r from-orange-300 via-pink-300 to-amber-200 bg-clip-text text-lg font-extrabold tracking-tight text-transparent">
+                  NeoShop
+                </span>
+                <span class="text-[11px] uppercase tracking-[0.18em] text-slate-400">
+                  Next‑gen marketplace
+                </span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Search -->
+          <div class="flex flex-1 items-center px-1 md:px-3">
+            <div class="relative flex w-full items-center rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-1.5 shadow-soft shadow-black/60 focus-within:border-orange-400/80 focus-within:ring-2 focus-within:ring-orange-500/40 md:px-4 md:py-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-4 w-4 text-slate-400 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" />
+              </svg>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search in 20K+ curated deals"
+                class="w-full bg-transparent text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none md:text-[0.95rem]"
+              />
+              <div class="hidden items-center gap-2 md:flex">
+                <span class="hidden rounded-full border border-white/10 px-2.5 py-0.5 text-[11px] text-slate-400 lg:inline-flex">
+                  Popular: <span class="ml-1 text-orange-400">wireless earbuds</span>
+                </span>
+                <button
+                  id="searchBtn"
+                  class="btn-neo ml-2 inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-semibold text-white shadow-lg transition md:px-4 md:text-sm"
+                >
+                  <span>Search</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Actions -->
+          <div class="flex items-center gap-1 md:gap-3">
+            <button class="hidden h-9 items-center gap-2 rounded-xl border border-white/10 bg-slate-900/80 px-3 text-xs font-medium text-slate-200 hover:border-orange-400/70 hover:text-orange-200 md:inline-flex">
+              <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-800 text-[11px] text-slate-300">
+                ⚡
+              </span>
+              <span>Vouchers</span>
+            </button>
+
+            <button
+              id="cartToggle"
+              class="relative inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-orange-400/40 bg-gradient-to-br from-orange-500/30 via-pink-500/20 to-amber-400/15 text-orange-100 shadow-soft hover:from-orange-500/40 hover:text-white md:h-10 md:w-10"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3.5 4h1.75L7 17h11l1.5-9H6" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M10 20.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM18 20.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z" />
+              </svg>
+              <span
+                id="cartCountBadge"
+                class="badge-pulse absolute -right-1.5 -top-1.5 hidden min-w-[1.15rem] rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-rose-500 px-1 text-center text-[10px] font-semibold leading-4 text-white shadow-lg"
+              >
+                0
+              </span>
+            </button>
+
+            <button class="hidden h-9 items-center gap-2 rounded-full border border-white/10 bg-slate-900/90 px-3 text-xs font-medium text-slate-100 hover:border-slate-400/60 md:inline-flex">
+              <span
+                class="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500/80 to-cyan-400/90 text-[11px] font-semibold shadow-md"
+              >
+                J
+              </span>
+              <span>Hi, Jordan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category nav -->
+        <div class="border-t border-white/5 bg-black/20">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
+            <div class="hide-scrollbar-mobile flex flex-1 items-center gap-1 overflow-x-auto text-xs md:gap-2 md:text-[13px]">
+              <button
+                class="category-chip chip-active flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em]"
+                data-category="all"
+              >
+                <span class="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-orange-400 via-pink-400 to-amber-300 shadow-sm shadow-orange-400/60"></span>
+                All Deals
+              </button>
+              <button class="category-chip flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200" data-category="Electronics">
+                📱 Electronics
+              </button>
+              <button class="category-chip flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200" data-category="Fashion">
+                👟 Fashion
+              </button>
+              <button class="category-chip flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200" data-category="Home">
+                🏠 Home
+              </button>
+              <button class="category-chip flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200" data-category="Beauty">
+                💄 Beauty
+              </button>
+              <button class="category-chip flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200" data-category="Gaming">
+                🎮 Gaming
+              </button>
+              <button class="category-chip flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] text-slate-200" data-category="Lifestyle">
+                ☕ Lifestyle
+              </button>
+            </div>
+            <div class="hidden items-center gap-1 text-[11px] text-slate-400 md:flex">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+              <span>99.98% uptime</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Mobile bottom bar -->
+      <div class="fixed inset-x-0 bottom-0 z-30 border-t border-white/5 bg-slate-950/95 px-4 py-2.5 backdrop-blur md:hidden">
+        <div class="mx-auto flex max-w-6xl items-center justify-between text-[11px] text-slate-300">
+          <button class="flex flex-1 flex-col items-center gap-0.5">
+            <span class="flex h-7 w-7 items-center justify-center rounded-xl bg-slate-800 text-slate-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 12l9-9 9 9M4.5 10.5V21H10v-6h4v6h5.5V10.5" />
+              </svg>
+            </span>
+            <span>Home</span>
+          </button>
+          <button class="flex flex-1 flex-col items-center gap-0.5">
+            <span class="flex h-7 w-7 items-center justify-center rounded-xl bg-slate-800 text-slate-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            </span>
+            <span>Categories</span>
+          </button>
+          <button id="mobileFlashScroll" class="flex flex-1 flex-col items-center gap-0.5">
+            <span class="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-pink-500 text-white">
+              ⚡
+            </span>
+            <span>Flash</span>
+          </button>
+          <button id="mobileCartToggle" class="flex flex-1 flex-col items-center gap-0.5">
+            <span class="relative flex h-7 w-7 items-center justify-center rounded-xl bg-slate-800 text-slate-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3.5 4h1.75L7 17h11l1.5-9H6" />
+              </svg>
+              <span
+                id="cartCountBadgeMobile"
+                class="badge-pulse absolute -right-0.5 -top-0.5 hidden min-w-[0.9rem] rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-rose-500 px-0.5 text-center text-[9px] font-semibold leading-3 text-white shadow"
+              >
+                0
+              </span>
+            </span>
+            <span>Cart</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <main class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-4 pb-20 pt-4 md:gap-6 md:pb-10 md:pt-6">
+        <!-- Hero + flash -->
+        <section class="grid gap-4 md:grid-cols-[minmax(0,2fr),minmax(0,1.25fr)] md:gap-5">
+          <!-- Hero -->
+          <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950 shadow-soft">
+            <div class="absolute inset-0 opacity-70 mix-blend-soft-light">
+              <div class="absolute -left-10 top-0 h-40 w-40 rounded-full bg-orange-500/30 blur-3xl"></div>
+              <div class="absolute -right-10 bottom-0 h-40 w-40 rounded-full bg-pink-500/30 blur-3xl"></div>
+            </div>
+            <div class="relative flex h-full flex-col justify-between gap-4 px-4 py-4 md:flex-row md:px-7 md:py-6">
+              <div class="flex flex-1 flex-col justify-between gap-4">
+                <div class="flex flex-col gap-3">
+                  <span class="inline-flex items-center gap-2 self-start rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-orange-300 ring-1 ring-orange-500/40">
+                    <span class="h-1.5 w-1.5 rounded-full bg-orange-400 shadow shadow-orange-500/60"></span>
+                    11.11 Hyperdrop
+                  </span>
+                  <h1 class="max-w-xl bg-gradient-to-br from-white via-orange-100 to-amber-200 bg-clip-text text-2xl font-extrabold leading-tight tracking-tight text-transparent sm:text-3xl md:text-[2.1rem]">
+                    Shop like Shopee, <span class="underline decoration-orange-400/70 decoration-2 underline-offset-[6px]">without</span>
+                    the clutter.
+                  </h1>
+                  <p class="max-w-lg text-sm text-slate-300 md:text-[0.92rem]">
+                    Curated products, precision search, and a checkout built for speed. Lightning‑fast, distraction‑free shopping with hyper‑visual
+                    product discovery.
+                  </p>
+                  <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                    <div class="inline-flex items-center gap-1 rounded-full bg-slate-900/80 px-2.5 py-1">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                      <span>Verified sellers only</span>
+                    </div>
+                    <span>•</span>
+                    <span>Instant refunds on returns</span>
+                    <span>•</span>
+                    <span>Secure by default</span>
+                  </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                  <button
+                    id="heroShopNow"
+                    class="btn-neo inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg transition md:px-5 md:py-2.5"
+                  >
+                    <span>Shop ultra deals</span>
+                    <span class="hidden text-xs md:inline">↳ limited today</span>
+                  </button>
+                  <button
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-500/40 bg-slate-950/80 px-3.5 py-2 text-xs font-medium text-slate-100 hover:border-slate-200/70 md:px-4"
+                  >
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-[11px] text-amber-300">
+                      ★
+                    </span>
+                    4.9 · 98k+ reviews
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-2 flex flex-1 flex-col items-stretch justify-between gap-3 md:mt-0 md:items-end">
+                <div class="w-full rounded-2xl border border-white/10 bg-slate-950/80 p-3 shadow-soft md:max-w-xs">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-tr from-orange-500 to-pink-500 text-xs">
+                        ⚡
+                      </span>
+                      <div class="text-xs">
+                        <p class="font-semibold text-orange-100">Flash Drop ends in</p>
+                        <p class="text-[11px] text-slate-400">Every item under $29 today</p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="inline-flex rounded-full bg-slate-900/80 px-2 py-1 text-[11px] text-slate-200">
+                        Save up to
+                        <span class="ml-1 font-semibold text-amber-300">89%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex items-center justify-between gap-2">
+                    <div class="flex gap-1 rounded-full bg-slate-900/80 px-2 py-1 text-[11px] font-mono text-amber-200">
+                      <span id="timerHours">00</span>:
+                      <span id="timerMinutes">00</span>:
+                      <span id="timerSeconds">00</span>
+                    </div>
+                    <div class="flex flex-1 flex-col gap-1">
+                      <div class="flex justify-between text-[10px] text-slate-400">
+                        <span>Stock</span>
+                        <span id="flashSoldLabel">548 sold</span>
+                      </div>
+                      <div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                        <div id="flashProgress" class="h-full w-2/3 rounded-full bg-gradient-to-r from-orange-500 via-pink-500 to-amber-400"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hidden w-full grid-cols-3 gap-2 text-[11px] text-slate-200 sm:grid md:max-w-xs">
+                  <div class="gradient-ring rounded-2xl bg-slate-950/80 p-2.5">
+                    <p class="text-slate-400">Same‑day</p>
+                    <p class="mt-0.5 text-xs font-semibold text-slate-100">Urban delivery</p>
+                  </div>
+                  <div class="gradient-ring rounded-2xl bg-slate-950/80 p-2.5">
+                    <p class="text-slate-400">Safe</p>
+                    <p class="mt-0.5 text-xs font-semibold text-slate-100">Escrow payments</p>
+                  </div>
+                  <div class="gradient-ring rounded-2xl bg-slate-950/80 p-2.5">
+                    <p class="text-slate-400">Real‑time</p>
+                    <p class="mt-0.5 text-xs font-semibold text-slate-100">Inventory</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flash sale carousel -->
+          <div
+            id="flashSection"
+            class="glass-soft relative flex flex-col gap-3 overflow-hidden rounded-3xl border border-orange-500/35 px-3 py-3 shadow-soft md:px-4 md:py-4"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-pink-600 text-lg shadow-md">
+                  ⚡
+                </span>
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.16em] text-orange-200">
+                    Neo Flash
+                  </p>
+                  <p class="text-[11px] text-slate-300">Curated instant‑drop deals, updated live.</p>
+                </div>
+              </div>
+              <button class="text-[11px] font-medium text-orange-200 hover:text-amber-200">
+                View all →
+              </button>
+            </div>
+
+            <div class="hide-scrollbar-mobile flex gap-3 overflow-x-auto pb-1 pt-1">
+              <div class="min-w-[7.5rem] max-w-[7.5rem] rounded-2xl bg-slate-950/85 p-2">
+                <div class="relative overflow-hidden rounded-xl bg-slate-900/90">
+                  <img
+                    src="https://images.pexels.com/photos/7164110/pexels-photo-7164110.jpeg?auto=compress&cs=tinysrgb&w=400"
+                    alt="Wireless Pro Buds"
+                    class="h-24 w-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  <span class="badge-pulse absolute left-1.5 top-1.5 rounded-full bg-emerald-500/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                    92% off
+                  </span>
+                </div>
+                <p class="mt-1.5 line-clamp-2 text-[11px] font-medium text-slate-100">
+                  NeoBuds Air Pro TWS
+                </p>
+                <div class="mt-0.5 flex items-baseline gap-1">
+                  <span class="text-sm font-semibold text-amber-300">$18.90</span>
+                  <span class="text-[10px] text-slate-500 line-through">$229.00</span>
+                </div>
+                <div class="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-800">
+                  <div class="h-full w-[68%] rounded-full bg-gradient-to-r from-orange-500 via-pink-500 to-amber-400"></div>
+                </div>
+                <p class="mt-0.5 text-[10px] text-slate-400">1.4k sold</p>
+              </div>
+
+              <div class="min-w-[7.5rem] max-w-[7.5rem] rounded-2xl bg-slate-950/85 p-2">
+                <div class="relative overflow-hidden rounded-xl bg-slate-900/90">
+                  <img
+                    src="https://images.pexels.com/photos/8454346/pexels-photo-8454346.jpeg?auto=compress&cs=tinysrgb&w=400"
+                    alt="Mechanical Keyboard"
+                    class="h-24 w-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  <span class="absolute left-1.5 top-1.5 rounded-full bg-sky-500/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                    Editor's pick
+                  </span>
+                </div>
+                <p class="mt-1.5 line-clamp-2 text-[11px] font-medium text-slate-100">
+                  Glacier75 RGB Mech Board
+                </p>
+                <div class="mt-0.5 flex items-baseline gap-1">
+                  <span class="text-sm font-semibold text-amber-300">$69.00</span>
+                  <span class="text-[10px] text-slate-500 line-through">$179.00</span>
+                </div>
+                <p class="mt-0.5 text-[10px] text-emerald-400">5 yr warranty</p>
+              </div>
+
+              <div class="min-w-[7.5rem] max-w-[7.5rem] rounded-2xl bg-slate-950/85 p-2">
+                <div class="relative overflow-hidden rounded-xl bg-slate-900/90">
+                  <img
+                    src="https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?auto=compress&cs=tinysrgb&w=400"
+                    alt="Smart home light"
+                    class="h-24 w-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  <span class="absolute left-1.5 top-1.5 rounded-full bg-rose-500/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                    Buy 1 Get 1
+                  </span>
+                </div>
+                <p class="mt-1.5 line-clamp-2 text-[11px] font-medium text-slate-100">
+                  LumaGlow Smart Strip 5m
+                </p>
+                <div class="mt-0.5 flex items-baseline gap-1">
+                  <span class="text-sm font-semibold text-amber-300">$14.50</span>
+                  <span class="text-[10px] text-slate-500 line-through">$49.90</span>
+                </div>
+                <p class="mt-0.5 text-[10px] text-slate-400">Ships in 24h</p>
+              </div>
+
+              <div class="min-w-[7.5rem] max-w-[7.5rem] rounded-2xl bg-slate-950/85 p-2">
+                <div class="relative overflow-hidden rounded-xl bg-slate-900/90">
+                  <img
+                    src="https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg?auto=compress&cs=tinysrgb&w=400"
+                    alt="Sneakers"
+                    class="h-24 w-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  <span class="absolute left-1.5 top-1.5 rounded-full bg-amber-500/95 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                    2.3k wishlisted
+                  </span>
+                </div>
+                <p class="mt-1.5 line-clamp-2 text-[11px] font-medium text-slate-100">
+                  AeroStep Street Runners
+                </p>
+                <div class="mt-0.5 flex items-baseline gap-1">
+                  <span class="text-sm font-semibold text-amber-300">$39.90</span>
+                  <span class="text-[10px] text-slate-500 line-through">$99.00</span>
+                </div>
+                <p class="mt-0.5 text-[10px] text-emerald-400">Free returns</p>
+              </div>
+            </div>
+
+            <div class="mt-1 flex items-center justify-between text-[10px] text-slate-400">
+              <span>Refreshed every 5 minutes</span>
+              <span>Tap and hold to quick preview</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filters + stats -->
+        <section class="glass-soft flex flex-col gap-3 rounded-3xl border border-white/10 px-3 py-3 shadow-soft md:flex-row md:items-center md:justify-between md:px-4 md:py-3.5">
+          <div class="flex flex-wrap items-center gap-2 text-xs md:gap-3">
+            <span class="rounded-full bg-slate-950/80 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-200">
+              Discover
+            </span>
+            <div class="flex items-center gap-2 text-[11px] text-slate-300">
+              <span id="productCount">0</span>
+              <span>results</span>
+              <span class="hidden sm:inline text-slate-500">·</span>
+              <span class="hidden sm:inline" id="activeFilterLabel">All curated categories</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-[11px] md:gap-3">
+            <div class="flex items-center gap-1 rounded-full bg-slate-900/80 px-2 py-1">
+              <label class="text-slate-400">Sort</label>
+              <select
+                id="sortSelect"
+                class="bg-transparent text-[11px] font-medium text-slate-100 focus:outline-none"
+              >
+                <option value="popular">Most popular</option>
+                <option value="price-asc">Price: Low → High</option>
+                <option value="price-desc">Price: High → Low</option>
+                <option value="rating-desc">Rating: High → Low</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+            <div class="hidden items-center gap-2 rounded-full bg-slate-900/80 px-2 py-1 sm:flex">
+              <span class="text-slate-400">Price</span>
+              <input
+                id="minPriceInput"
+                type="number"
+                min="0"
+                placeholder="Min"
+                class="w-14 rounded-full bg-slate-950/80 px-2 py-0.5 text-[10px] text-slate-100 outline-none"
+              />
+              <span>–</span>
+              <input
+                id="maxPriceInput"
+                type="number"
+                min="0"
+                placeholder="Max"
+                class="w-14 rounded-full bg-slate-950/80 px-2 py-0.5 text-[10px] text-slate-100 outline-none"
+              />
+            </div>
+            <button
+              id="clearFilters"
+              class="inline-flex items-center gap-1 rounded-full border border-slate-600/60 px-2.5 py-1 text-[11px] text-slate-300 hover:border-slate-200 hover:text-slate-50"
+            >
+              <span>Reset</span>
+              <span class="text-[13px]">⟲</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Product grid -->
+        <section class="grid gap-4 md:grid-cols-[minmax(0,0.85fr),minmax(0,2.15fr)] md:gap-5">
+          <!-- Sidebar filters -->
+          <aside class="hidden flex-col gap-3 rounded-3xl border border-white/10 bg-slate-950/90 p-3 shadow-soft md:flex md:p-4">
+            <h2 class="flex items-center justify-between text-xs font-semibold tracking-[0.18em] text-slate-300 uppercase">
+              Smart Filters
+              <span class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-normal text-slate-400">Live</span>
+            </h2>
+            <div class="space-y-3 text-[12px] text-slate-200">
+              <div>
+                <p class="mb-1.5 text-[11px] font-semibold text-slate-300">Delivery speed</p>
+                <div class="flex flex-wrap gap-1.5">
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="delivery" data-value="same-day"
+                  >
+                    Same‑day
+                  </button>
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="delivery" data-value="express"
+                  >
+                    Express
+                  </button>
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="delivery" data-value="standard"
+                  >
+                    Standard
+                  </button>
+                </div>
+              </div>
+              <div>
+                <p class="mb-1.5 text-[11px] font-semibold text-slate-300">Badges</p>
+                <div class="flex flex-wrap gap-1.5">
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="badge" data-value="bestseller"
+                  >
+                    Best‑seller
+                  </button>
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="badge" data-value="new"
+                  >
+                    New drop
+                  </button>
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="badge" data-value="eco"
+                  >
+                    Eco‑friendly
+                  </button>
+                </div>
+              </div>
+              <div>
+                <p class="mb-1.5 text-[11px] font-semibold text-slate-300">Rating</p>
+                <div class="flex flex-wrap gap-1.5">
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="rating" data-value="4.5"
+                  >
+                    4.5 ★ & up
+                  </button>
+                  <button
+                    class="side-filter-chip rounded-full border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-200"
+                    data-filter="rating" data-value="4"
+                  >
+                    4.0 ★ & up
+                  </button>
+                </div>
+              </div>
+              <div class="pt-1 text-[11px] text-slate-500">
+                Filters auto‑stack. Hover cards show seller trust & delivery ETA.
+              </div>
+            </div>
+          </aside>
+
+          <!-- Products -->
+          <div>
+            <div
+              id="productsGrid"
+              class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4"
+            >
+              <!-- Product cards injected by JS -->
+            </div>
+            <div id="emptyState" class="mt-6 hidden rounded-2xl border border-dashed border-slate-700 bg-slate-950/80 p-6 text-center text-sm text-slate-300">
+              No products match your filters yet.
+              <button
+                id="resetFromEmpty"
+                class="ml-2 inline-flex items-center gap-1 rounded-full border border-slate-500/70 bg-slate-900/90 px-3 py-1.5 text-xs text-slate-100 hover:border-slate-200"
+              >
+                Clear filters
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="border-t border-white/5 bg-slate-950/95 py-4 text-xs text-slate-400">
+        <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 md:flex-row">
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-500">©</span>
+            <span class="font-semibold text-slate-200">NeoShop</span>
+            <span class="text-slate-500">2025</span>
+          </div>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <span>Built for speed, privacy‑first checkout.</span>
+            <span class="hidden h-1 w-1 rounded-full bg-slate-500 md:inline-block"></span>
+            <span class="hidden text-slate-500 md:inline">Not affiliated with Shopee.</span>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Cart Drawer -->
+      <div
+        id="cartDrawer"
+        class="fixed inset-y-0 right-0 z-50 w-full max-w-md translate-x-full transform bg-slate-950/95 shadow-2xl shadow-black/80 transition-transform duration-300 ease-in-out"
+      >
+        <div class="flex h-full flex-col border-l border-white/5">
+          <div class="flex items-center justify-between border-b border-white/10 bg-slate-950/95 px-4 py-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+                Cart
+              </p>
+              <p class="text-sm text-slate-200">
+                <span id="cartItemCount">0</span> items ·
+                <span id="cartSubtotalLabel" class="font-semibold text-amber-300">$0.00</span>
+              </p>
+            </div>
+            <button
+              id="cartClose"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-900/80 text-slate-300 hover:text-white"
+              aria-label="Close cart"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div id="cartItemsContainer" class="flex-1 space-y-3 overflow-y-auto px-4 py-3 text-sm">
+            <!-- Cart items injected by JS -->
+          </div>
+
+          <div class="border-t border-white/10 bg-slate-950/95 px-4 py-3 text-sm">
+            <div class="flex items-center justify-between text-slate-300">
+              <span>Subtotal</span>
+              <span id="cartSubtotal" class="text-base font-semibold text-amber-300">$0.00</span>
+            </div>
+            <p class="mt-1 text-[11px] text-slate-500">
+              Taxes and shipping calculated at checkout. Free delivery for orders over $49.
+            </p>
+            <button
+              class="btn-neo mt-3 inline-flex w-full items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-semibold text-white"
+            >
+              Checkout securely
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart overlay -->
+      <div
+        id="cartOverlay"
+        class="pointer-events-none fixed inset-0 z-40 bg-black/40 opacity-0 backdrop-blur-sm transition-opacity duration-300"
+      ></div>
+    </div>
+  </div>
+
+  <script>
+    // Mock product data
+    const products = [
+      {
+        id: 1,
+        name: "NeoBuds Air Pro TWS",
+        price: 18.9,
+        originalPrice: 229,
+        category: "Electronics",
+        image: "https://images.pexels.com/photos/7156889/pexels-photo-7156889.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.8,
+        reviews: 4123,
+        badge: "bestseller",
+        delivery: "express",
+        isNew: false,
+        isFlash: true,
+        tag: "Noise cancelling • Low latency",
+      },
+      {
+        id: 2,
+        name: "Glacier75 RGB Mech Keyboard",
+        price: 69,
+        originalPrice: 179,
+        category: "Electronics",
+        image: "https://images.pexels.com/photos/8454348/pexels-photo-8454348.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.9,
+        reviews: 2319,
+        badge: "bestseller",
+        delivery: "same-day",
+        isNew: true,
+        isFlash: false,
+        tag: "Gasket mount • Hot‑swappable",
+      },
+      {
+        id: 3,
+        name: "AeroStep Street Runners",
+        price: 39.9,
+        originalPrice: 99,
+        category: "Fashion",
+        image: "https://images.pexels.com/photos/7671164/pexels-photo-7671164.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.7,
+        reviews: 1782,
+        badge: "bestseller",
+        delivery: "standard",
+        isNew: false,
+        isFlash: true,
+        tag: "Breathable • Everyday comfort",
+      },
+      {
+        id: 4,
+        name: "LumaGlow Smart Strip 5m",
+        price: 14.5,
+        originalPrice: 49.9,
+        category: "Home",
+        image: "https://images.pexels.com/photos/3736397/pexels-photo-3736397.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.6,
+        reviews: 952,
+        badge: "new",
+        delivery: "express",
+        isNew: true,
+        isFlash: true,
+        tag: "App‑controlled • 16M colors",
+      },
+      {
+        id: 5,
+        name: "CloudCotton Luxe Duvet",
+        price: 59,
+        originalPrice: 139,
+        category: "Home",
+        image: "https://images.pexels.com/photos/37347/bed-bedroom-sheet-pillow.jpg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.9,
+        reviews: 1268,
+        badge: "bestseller",
+        delivery: "standard",
+        isNew: false,
+        isFlash: false,
+        tag: "Hypoallergenic • Ultra soft",
+      },
+      {
+        id: 6,
+        name: "VerdeGlass Insulated Bottle",
+        price: 21.9,
+        originalPrice: 39.9,
+        category: "Lifestyle",
+        image: "https://images.pexels.com/photos/3255249/pexels-photo-3255249.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.5,
+        reviews: 623,
+        badge: "eco",
+        delivery: "standard",
+        isNew: true,
+        isFlash: false,
+        tag: "BPA‑free • 24h cold",
+      },
+      {
+        id: 7,
+        name: "NovaSkin Glow Serum",
+        price: 27.5,
+        originalPrice: 54,
+        category: "Beauty",
+        image: "https://images.pexels.com/photos/3738341/pexels-photo-3738341.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.8,
+        reviews: 908,
+        badge: "bestseller",
+        delivery: "express",
+        isNew: false,
+        isFlash: false,
+        tag: "Vitamin C • Glass skin",
+      },
+      {
+        id: 8,
+        name: "Aurora Studio Headphones",
+        price: 119,
+        originalPrice: 249,
+        category: "Electronics",
+        image: "https://images.pexels.com/photos/3394664/pexels-photo-3394664.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.9,
+        reviews: 3210,
+        badge: "bestseller",
+        delivery: "same-day",
+        isNew: true,
+        isFlash: false,
+        tag: "ANC • 40h battery",
+      },
+      {
+        id: 9,
+        name: "FluxArc Gaming Mouse",
+        price: 29.9,
+        originalPrice: 79.9,
+        category: "Gaming",
+        image: "https://images.pexels.com/photos/9072309/pexels-photo-9072309.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.6,
+        reviews: 1412,
+        badge: "new",
+        delivery: "express",
+        isNew: true,
+        isFlash: true,
+        tag: "75g lightweight • 8K polling",
+      },
+      {
+        id: 10,
+        name: "Nebula Projector Mini 4K",
+        price: 229,
+        originalPrice: 399,
+        category: "Electronics",
+        image: "https://images.pexels.com/photos/6898859/pexels-photo-6898859.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.7,
+        reviews: 562,
+        badge: "bestseller",
+        delivery: "standard",
+        isNew: false,
+        isFlash: false,
+        tag: "HDR • Wi‑Fi casting",
+      },
+      {
+        id: 11,
+        name: "ZenBrew Pour Over Kit",
+        price: 34,
+        originalPrice: 79,
+        category: "Lifestyle",
+        image: "https://images.pexels.com/photos/373888/pexels-photo-373888.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.8,
+        reviews: 347,
+        badge: "eco",
+        delivery: "standard",
+        isNew: false,
+        isFlash: false,
+        tag: "Barista‑grade • Minimalist",
+      },
+      {
+        id: 12,
+        name: "SilkFlow Pillowcase Set",
+        price: 24.9,
+        originalPrice: 59,
+        category: "Home",
+        image: "https://images.pexels.com/photos/1483863/pexels-photo-1483863.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.5,
+        reviews: 785,
+        badge: "eco",
+        delivery: "standard",
+        isNew: true,
+        isFlash: false,
+        tag: "Anti‑frizz • Cooling",
+      },
+      {
+        id: 13,
+        name: "PulseFit Smart Band 7",
+        price: 44.9,
+        originalPrice: 99,
+        category: "Electronics",
+        image: "https://images.pexels.com/photos/5094569/pexels-photo-5094569.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.4,
+        reviews: 1198,
+        badge: "new",
+        delivery: "express",
+        isNew: true,
+        isFlash: true,
+        tag: "SpO2 • 10‑day battery",
+      },
+      {
+        id: 14,
+        name: "VelvetRise Chunky Sneakers",
+        price: 54,
+        originalPrice: 129,
+        category: "Fashion",
+        image: "https://images.pexels.com/photos/2529156/pexels-photo-2529156.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.3,
+        reviews: 432,
+        badge: "new",
+        delivery: "standard",
+        isNew: true,
+        isFlash: false,
+        tag: "Street‑style • Platform",
+      },
+      {
+        id: 15,
+        name: "Spectrum Pro Gaming Chair",
+        price: 189,
+        originalPrice: 329,
+        category: "Gaming",
+        image: "https://images.pexels.com/photos/9072216/pexels-photo-9072216.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.7,
+        reviews: 751,
+        badge: "bestseller",
+        delivery: "standard",
+        isNew: false,
+        isFlash: false,
+        tag: "Lumbar support • Recline",
+      },
+      {
+        id: 16,
+        name: "Velora Matte Lip Cloud",
+        price: 15.9,
+        originalPrice: 29,
+        category: "Beauty",
+        image: "https://images.pexels.com/photos/3738364/pexels-photo-3738364.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rating: 4.6,
+        reviews: 633,
+        badge: "new",
+        delivery: "express",
+        isNew: true,
+        isFlash: false,
+        tag: "Weightless • Transfer‑proof",
+      },
+    ];
+
+    const state = {
+      search: "",
+      category: "all",
+      sort: "popular",
+      minPrice: null,
+      maxPrice: null,
+      delivery: null,
+      badge: null,
+      ratingMin: null,
+      cart: [],
+    };
+
+    const dom = {
+      productsGrid: document.getElementById("productsGrid"),
+      productCount: document.getElementById("productCount"),
+      activeFilterLabel: document.getElementById("activeFilterLabel"),
+      searchInput: document.getElementById("searchInput"),
+      searchBtn: document.getElementById("searchBtn"),
+      sortSelect: document.getElementById("sortSelect"),
+      minPriceInput: document.getElementById("minPriceInput"),
+      maxPriceInput: document.getElementById("maxPriceInput"),
+      clearFilters: document.getElementById("clearFilters"),
+      resetFromEmpty: document.getElementById("resetFromEmpty"),
+      emptyState: document.getElementById("emptyState"),
+      cartDrawer: document.getElementById("cartDrawer"),
+      cartOverlay: document.getElementById("cartOverlay"),
+      cartToggle: document.getElementById("cartToggle"),
+      mobileCartToggle: document.getElementById("mobileCartToggle"),
+      cartClose: document.getElementById("cartClose"),
+      cartItemsContainer: document.getElementById("cartItemsContainer"),
+      cartItemCount: document.getElementById("cartItemCount"),
+      cartSubtotal: document.getElementById("cartSubtotal"),
+      cartSubtotalLabel: document.getElementById("cartSubtotalLabel"),
+      cartCountBadge: document.getElementById("cartCountBadge"),
+      cartCountBadgeMobile: document.getElementById("cartCountBadgeMobile"),
+      flashSection: document.getElementById("flashSection"),
+      mobileFlashScroll: document.getElementById("mobileFlashScroll"),
+      heroShopNow: document.getElementById("heroShopNow"),
+    };
+
+    function formatPrice(n) {
+      return "$" + n.toFixed(2);
+    }
+
+    function applyFilters() {
+      let filtered = [...products];
+
+      if (state.search.trim()) {
+        const q = state.search.toLowerCase();
+        filtered = filtered.filter(
+          (p) =>
+            p.name.toLowerCase().includes(q) ||
+            p.category.toLowerCase().includes(q) ||
+            (p.tag && p.tag.toLowerCase().includes(q))
+        );
+      }
+
+      if (state.category !== "all") {
+        filtered = filtered.filter((p) => p.category === state.category);
+      }
+
+      if (state.minPrice != null) {
+        filtered = filtered.filter((p) => p.price >= state.minPrice);
+      }
+      if (state.maxPrice != null) {
+        filtered = filtered.filter((p) => p.price <= state.maxPrice);
+      }
+
+      if (state.delivery) {
+        filtered = filtered.filter((p) => p.delivery === state.delivery);
+      }
+
+      if (state.badge) {
+        filtered = filtered.filter((p) => p.badge === state.badge);
+      }
+
+      if (state.ratingMin) {
+        filtered = filtered.filter((p) => p.rating >= state.ratingMin);
+      }
+
+      switch (state.sort) {
+        case "price-asc":
+          filtered.sort((a, b) => a.price - b.price);
+          break;
+        case "price-desc":
+          filtered.sort((a, b) => b.price - a.price);
+          break;
+        case "rating-desc":
+          filtered.sort((a, b) => b.rating - a.rating);
+          break;
+        case "newest":
+          filtered.sort((a, b) => (b.isNew === a.isNew ? b.id - a.id : b.isNew ? 1 : -1));
+          break;
+        default:
+          filtered.sort((a, b) => b.reviews - a.reviews);
+      }
+
+      renderProducts(filtered);
+      updateFilterLabel(filtered.length);
+    }
+
+    function renderProducts(items) {
+      dom.productsGrid.innerHTML = "";
+      dom.productCount.textContent = items.length;
+
+      if (!items.length) {
+        dom.emptyState.classList.remove("hidden");
+        return;
+      } else {
+        dom.emptyState.classList.add("hidden");
+      }
+
+      const fragment = document.createDocumentFragment();
+
+      items.forEach((p) => {
+        const el = document.createElement("article");
+        el.className =
+          "product-card group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/85 shadow-soft hover:border-orange-400/60 transition";
+
+        const badgeHtml = (() => {
+          const badges = [];
+          if (p.isFlash) {
+            badges.push(
+              '<span class="badge-pulse inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-orange-500 via-pink-600 to-rose-500 px-2 py-0.5 text-[10px] font-semibold text-white shadow">' +
+                '<span class="h-1.5 w-1.5 rounded-full bg-white"></span>' +
+                "Flash" +
+                "</span>"
+            );
+          }
+          if (p.isNew) {
+            badges.push(
+              '<span class="inline-flex rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">New</span>'
+            );
+          }
+          if (p.badge === "bestseller") {
+            badges.push(
+              '<span class="inline-flex rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-300">Best‑seller</span>'
+            );
+          }
+          if (p.badge === "eco") {
+            badges.push(
+              '<span class="inline-flex rounded-full bg-lime-500/15 px-2 py-0.5 text-[10px] font-semibold text-lime-300">Eco</span>'
+            );
+          }
+          return badges.join("");
+        })();
+
+        const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+
+        el.innerHTML = `
+          <div class="product-media relative overflow-hidden rounded-2xl bg-slate-900/80 transition-transform duration-200">
+            <img src="${p.image}" alt="${p.name}" class="h-32 w-full object-cover transition-transform duration-300 md:h-36" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90"></div>
+            <div class="absolute left-1.5 top-1.5 flex flex-wrap gap-1.5">
+              ${badgeHtml}
+            </div>
+            <div class="absolute bottom-1.5 left-1.5 right-1.5 flex items-center justify-between text-[10px] text-slate-200">
+              <div class="inline-flex items-center gap-0.5 rounded-full bg-black/60 px-1.5 py-0.5">
+                <span class="text-amber-300">★</span>
+                <span>${p.rating.toFixed(1)}</span>
+                <span class="text-slate-500">(${(p.reviews / 1000).toFixed(1)}k)</span>
+              </div>
+              <span class="inline-flex items-center gap-0.5 rounded-full bg-black/60 px-1.5 py-0.5">
+                <span class="h-1.5 w-1.5 rounded-full ${
+                  p.delivery === "same-day"
+                    ? "bg-emerald-400"
+                    : p.delivery === "express"
+                    ? "bg-sky-400"
+                    : "bg-slate-400"
+                }"></span>
+                <span>${
+                  p.delivery === "same-day" ? "Same‑day" : p.delivery === "express" ? "Express" : "Standard"
+                }</span>
+              </span>
+            </div>
+          </div>
+          <div class="product-meta flex flex-1 flex-col gap-1.5 px-2.5 py-2.5 transition-transform duration-200">
+            <div class="min-h-[2.4rem] text-[12px] font-medium leading-snug text-slate-100">
+              <p class="line-clamp-2">${p.name}</p>
+            </div>
+            <p class="line-clamp-1 text-[11px] text-slate-400">${p.tag || ""}</p>
+            <div class="mt-0.5 flex items-baseline gap-1.5">
+              <span class="text-sm font-semibold text-amber-300">${formatPrice(p.price)}</span>
+              <span class="text-[10px] text-slate-500 line-through">${formatPrice(p.originalPrice)}</span>
+              <span class="ml-auto rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                -${discount}%
+              </span>
+            </div>
+            <div class="mt-1 flex items-center justify-between text-[10px] text-slate-400">
+              <span>${p.category}</span>
+              <span>${p.reviews.toLocaleString()} sold</span>
+            </div>
+            <button
+              data-id="${p.id}"
+              class="add-to-cart mt-2 inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500/70 via-pink-500/70 to-amber-400/80 px-2.5 py-1.5 text-[11px] font-semibold text-white shadow hover:from-orange-500 hover:via-pink-500 hover:to-amber-400"
+            >
+              <span>Add to cart</span>
+              <span class="text-xs">+</span>
+            </button>
+          </div>
+        `;
+
+        fragment.appendChild(el);
+      });
+
+      dom.productsGrid.appendChild(fragment);
+
+      Array.from(dom.productsGrid.querySelectorAll(".add-to-cart")).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-id"));
+          addToCart(id);
+        });
+      });
+    }
+
+    function updateFilterLabel(len) {
+      const active = [];
+      if (state.category !== "all") active.push(state.category);
+      if (state.delivery) active.push(state.delivery.replace("-", " "));
+      if (state.badge) {
+        active.push(
+          state.badge === "bestseller"
+            ? "Best‑sellers"
+            : state.badge === "eco"
+            ? "Eco"
+            : "New drops"
+        );
+      }
+      if (state.ratingMin) active.push(`≥ ${state.ratingMin}★`);
+      if (state.minPrice || state.maxPrice) {
+        active.push(
+          `${state.minPrice ? `$${state.minPrice}` : "Any"}–${state.maxPrice ? `$${state.maxPrice}` : "Any"}`
+        );
+      }
+      dom.activeFilterLabel.textContent = active.length
+        ? `${active.join(" · ")} · ${len} results`
+        : "All curated categories";
+    }
+
+    function clearFilters() {
+      state.search = "";
+      state.category = "all";
+      state.sort = "popular";
+      state.minPrice = null;
+      state.maxPrice = null;
+      state.delivery = null;
+      state.badge = null;
+      state.ratingMin = null;
+
+      dom.searchInput.value = "";
+      dom.sortSelect.value = "popular";
+      dom.minPriceInput.value = "";
+      dom.maxPriceInput.value = "";
+
+      document.querySelectorAll(".category-chip").forEach((el) => {
+        el.classList.remove("chip-active");
+        el.classList.remove("bg-slate-900/90");
+        el.classList.add("bg-slate-900/60");
+      });
+      const allCat = document.querySelector('.category-chip[data-category="all"]');
+      if (allCat) {
+        allCat.classList.add("chip-active");
+        allCat.classList.remove("bg-slate-900/60");
+        allCat.classList.add("bg-slate-900/90");
+      }
+
+      document.querySelectorAll(".side-filter-chip").forEach((el) => {
+        el.classList.remove("chip-active");
+      });
+
+      applyFilters();
+    }
+
+    function addToCart(id) {
+      const product = products.find((p) => p.id === id);
+      if (!product) return;
+
+      const existing = state.cart.find((item) => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ id, qty: 1 });
+      }
+      renderCart();
+    }
+
+    function removeFromCart(id) {
+      state.cart = state.cart.filter((item) => item.id !== id);
+      renderCart();
+    }
+
+    function updateCartQty(id, qty) {
+      const item = state.cart.find((i) => i.id === id);
+      if (!item) return;
+      item.qty = Math.max(1, qty);
+      renderCart();
+    }
+
+    function renderCart() {
+      dom.cartItemsContainer.innerHTML = "";
+
+      if (!state.cart.length) {
+        dom.cartItemsContainer.innerHTML =
+          '<div class="mt-4 rounded-2xl border border-dashed border-slate-700 bg-slate-950/90 p-4 text-center text-xs text-slate-300">' +
+          "Your cart is still empty. Add a couple of items to see the magic at checkout." +
+          "</div>";
+      } else {
+        const fragment = document.createDocumentFragment();
+        let subtotal = 0;
+
+        state.cart.forEach((item) => {
+          const product = products.find((p) => p.id === item.id);
+          if (!product) return;
+          const lineTotal = product.price * item.qty;
+          subtotal += lineTotal;
+
+          const el = document.createElement("div");
+          el.className =
+            "flex gap-3 rounded-2xl border border-white/10 bg-slate-950/90 p-2.5 text-xs text-slate-100";
+
+          el.innerHTML = `
+            <div class="h-16 w-16 overflow-hidden rounded-xl bg-slate-900/80">
+              <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex flex-1 flex-col gap-1">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <p class="line-clamp-2 text-[12px] font-medium">${product.name}</p>
+                  <p class="mt-0.5 text-[11px] text-slate-400">${product.category} · ${
+            product.delivery === "same-day"
+              ? "Same‑day"
+              : product.delivery === "express"
+              ? "Express"
+              : "Standard"
+          }</p>
+                </div>
+                <button class="text-slate-500 hover:text-slate-200" data-remove="${product.id}">✕</button>
+              </div>
+              <div class="mt-1 flex items-center justify-between">
+                <div class="inline-flex items-center gap-1 rounded-full bg-slate-900/80 px-1.5 py-0.5">
+                  <button class="px-1 text-[13px] text-slate-300" data-dec="${product.id}">−</button>
+                  <input
+                    type="number"
+                    min="1"
+                    value="${item.qty}"
+                    class="w-8 bg-transparent text-center text-[11px] outline-none"
+                    data-qty="${product.id}"
+                  />
+                  <button class="px-1 text-[13px] text-slate-300" data-inc="${product.id}">+</button>
+                </div>
+                <div class="text-right">
+                  <p class="text-[12px] font-semibold text-amber-300">${formatPrice(lineTotal)}</p>
+                  <p class="text-[10px] text-slate-500">${item.qty} × ${formatPrice(product.price)}</p>
+                </div>
+              </div>
+            </div>
+          `;
+
+          fragment.appendChild(el);
+        });
+
+        dom.cartItemsContainer.appendChild(fragment);
+        dom.cartSubtotal.textContent = formatPrice(subtotal);
+        dom.cartSubtotalLabel.textContent = formatPrice(subtotal);
+      }
+
+      const totalItems = state.cart.reduce((sum, i) => sum + i.qty, 0);
+      dom.cartItemCount.textContent = totalItems;
+
+      if (totalItems > 0) {
+        dom.cartCountBadge.textContent = totalItems;
+        dom.cartCountBadge.classList.remove("hidden");
+        dom.cartCountBadgeMobile.textContent = totalItems;
+        dom.cartCountBadgeMobile.classList.remove("hidden");
+      } else {
+        dom.cartCountBadge.classList.add("hidden");
+        dom.cartCountBadgeMobile.classList.add("hidden");
+      }
+
+      Array.from(dom.cartItemsContainer.querySelectorAll("[data-remove]")).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-remove"));
+          removeFromCart(id);
+        });
+      });
+
+      Array.from(dom.cartItemsContainer.querySelectorAll("[data-inc]")).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-inc"));
+          const item = state.cart.find((i) => i.id === id);
+          if (!item) return;
+          updateCartQty(id, item.qty + 1);
+        });
+      });
+
+      Array.from(dom.cartItemsContainer.querySelectorAll("[data-dec]")).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-dec"));
+          const item = state.cart.find((i) => i.id === id);
+          if (!item) return;
+          if (item.qty <= 1) {
+            removeFromCart(id);
+          } else {
+            updateCartQty(id, item.qty - 1);
+          }
+        });
+      });
+
+      Array.from(dom.cartItemsContainer.querySelectorAll("[data-qty]")).forEach((input) => {
+        input.addEventListener("change", () => {
+          const id = Number(input.getAttribute("data-qty"));
+          const value = parseInt(input.value, 10) || 1;
+          updateCartQty(id, value);
+        });
+      });
+    }
+
+    function openCart() {
+      dom.cartDrawer.classList.remove("translate-x-full");
+      dom.cartOverlay.classList.remove("pointer-events-none");
+      dom.cartOverlay.classList.add("pointer-events-auto");
+      dom.cartOverlay.style.opacity = "1";
+    }
+
+    function closeCart() {
+      dom.cartDrawer.classList.add("translate-x-full");
+      dom.cartOverlay.classList.add("pointer-events-none");
+      dom.cartOverlay.classList.remove("pointer-events-auto");
+      dom.cartOverlay.style.opacity = "0";
+    }
+
+    function initTimer() {
+      const now = new Date();
+      const target = new Date(now.getTime() + 7 * 60 * 60 * 1000 + 23 * 60 * 1000 + 42 * 1000);
+
+      function update() {
+        const diff = target - new Date();
+        if (diff <= 0) return;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        document.getElementById("timerHours").textContent = String(hours).padStart(2, "0");
+        document.getElementById("timerMinutes").textContent = String(minutes).padStart(2, "0");
+        document.getElementById("timerSeconds").textContent = String(seconds).padStart(2, "0");
+
+        const total = 8 * 60 * 60 * 1000;
+        const progress = Math.min(1, diff / total);
+        const width = 30 + progress * 40;
+        const progressBar = document.getElementById("flashProgress");
+        if (progressBar) progressBar.style.width = width + "%";
+
+        const soldLabel = document.getElementById("flashSoldLabel");
+        if (soldLabel) {
+          const sold = Math.floor((1 - progress) * 900 + 400);
+          soldLabel.textContent = `${sold} sold`;
+        }
+      }
+
+      update();
+      setInterval(update, 1000);
+    }
+
+    function initEvents() {
+      dom.searchInput.addEventListener("input", (e) => {
+        state.search = e.target.value;
+        applyFilters();
+      });
+      dom.searchBtn.addEventListener("click", () => {
+        state.search = dom.searchInput.value;
+        applyFilters();
+      });
+
+      document.querySelectorAll(".category-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          const category = chip.getAttribute("data-category");
+          state.category = category;
+          document.querySelectorAll(".category-chip").forEach((c) => {
+            c.classList.remove("chip-active");
+            c.classList.remove("bg-slate-900/90");
+            c.classList.add("bg-slate-900/60");
+          });
+          chip.classList.add("chip-active");
+          chip.classList.remove("bg-slate-900/60");
+          chip.classList.add("bg-slate-900/90");
+          applyFilters();
+        });
+      });
+
+      dom.sortSelect.addEventListener("change", () => {
+        state.sort = dom.sortSelect.value;
+        applyFilters();
+      });
+
+      const priceHandler = () => {
+        const min = parseFloat(dom.minPriceInput.value);
+        const max = parseFloat(dom.maxPriceInput.value);
+        state.minPrice = isNaN(min) ? null : min;
+        state.maxPrice = isNaN(max) ? null : max;
+        applyFilters();
+      };
+      dom.minPriceInput.addEventListener("change", priceHandler);
+      dom.maxPriceInput.addEventListener("change", priceHandler);
+
+      dom.clearFilters.addEventListener("click", clearFilters);
+      dom.resetFromEmpty.addEventListener("click", clearFilters);
+
+      document.querySelectorAll(".side-filter-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          const filter = chip.getAttribute("data-filter");
+          const value = chip.getAttribute("data-value");
+          const isActive = chip.classList.contains("chip-active");
+
+          if (filter === "delivery") state.delivery = isActive ? null : value;
+          if (filter === "badge") state.badge = isActive ? null : value;
+          if (filter === "rating") state.ratingMin = isActive ? null : parseFloat(value);
+
+          document.querySelectorAll(`.side-filter-chip[data-filter="${filter}"]`).forEach((c) =>
+            c.classList.remove("chip-active")
+          );
+          if (!isActive) chip.classList.add("chip-active");
+
+          applyFilters();
+        });
+      });
+
+      dom.cartToggle.addEventListener("click", openCart);
+      dom.mobileCartToggle.addEventListener("click", openCart);
+      dom.cartClose.addEventListener("click", closeCart);
+      dom.cartOverlay.addEventListener("click", closeCart);
+
+      if (dom.flashSection && dom.mobileFlashScroll) {
+        dom.mobileFlashScroll.addEventListener("click", () => {
+          dom.flashSection.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+      }
+
+      if (dom.heroShopNow) {
+        dom.heroShopNow.addEventListener("click", () => {
+          dom.productsGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProducts(products);
+      renderCart();
+      initEvents();
+      initTimer();
+      applyFilters();
+    });
+  </script>
+</body>
+</html>
